@@ -26,41 +26,41 @@ help: ## Show this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 .PHONY: setup
-setup: ## $(WRENCH) Install and verify required tools (Xcode, Tuist)
+setup: ## 🛠️  Install and verify required tools (Xcode, Tuist)
 	@./scripts/setup.sh
 
 .PHONY: project
-project: ## $(PACKAGE) Generate Xcode project with Tuist
+project: ## 📦 Generate Xcode project with Tuist
 	@echo "$(BLUE)$(PACKAGE) Generating Xcode project...$(RESET)"
 	@tuist install
 	@tuist generate $(if $(NO_OPEN),--no-open) $(if $(filter 1,$(VERBOSE)),--verbose)
 	@echo "$(GREEN)$(CHECK) Project generated successfully!$(RESET)"
 
 .PHONY: install-deps
-install-deps: ## $(PACKAGE) Resolve Swift package dependencies (updates Tuist/Package.resolved)
+install-deps: ## 📦 Resolve Swift package dependencies (updates Tuist/Package.resolved)
 	@echo "$(BLUE)$(PACKAGE) Resolving Swift package dependencies...$(RESET)"
 	@tuist install $(if $(filter 1,$(VERBOSE)),--verbose)
 	@echo "$(GREEN)$(CHECK) Dependencies resolved!$(RESET)"
 
 .PHONY: build
-build: ## $(WRENCH) Build the project (TARGET=__APP_NAME__ by default)
+build: ## 🛠️  Build the project (TARGET=__APP_NAME__ by default)
 	@echo "$(BLUE)$(WRENCH) Building $(TARGET)...$(RESET)"
 	@tuist build $(TARGET)
 	@echo "$(GREEN)$(CHECK) Build succeeded!$(RESET)"
 
 .PHONY: unit-test
-unit-test: ## $(TEST) Run unit tests (FILTER=Target[/Suite[/case]] to scope)
+unit-test: ## 🧪 Run unit tests (FILTER=Target[/Suite[/case]] to scope)
 	@echo "$(BLUE)$(TEST) Running unit tests...$(RESET)"
 	@tuist test $(SCHEME) --device $(DEVICE) --no-selective-testing \
 		$(if $(FILTER),--test-targets=$(FILTER),$(addprefix --test-targets=,$(UNIT_TEST_TARGETS)))
 	@echo "$(GREEN)$(CHECK) Unit tests passed!$(RESET)"
 
 .PHONY: snapshot-test
-snapshot-test: ## $(TEST) Run snapshot tests (REPLACE=1 to re-record baselines, FILTER=... to scope)
+snapshot-test: ## 🧪 Run snapshot tests (REPLACE=1 to re-record baselines, FILTER=... to scope)
 	@echo "$(BLUE)$(TEST) Running snapshot tests$(if $(REPLACE), (record mode))...$(RESET)"
 	@tuist test $(if $(REPLACE),Snapshots-Record,Snapshots) --device $(DEVICE) --no-selective-testing \
 		$(if $(FILTER),--test-targets=$(FILTER))
 	@echo "$(GREEN)$(CHECK) Snapshot tests passed!$(RESET)"
 
 .PHONY: test
-test: unit-test snapshot-test ## $(TEST) Run all tests (unit + snapshot)
+test: unit-test snapshot-test ## 🧪 Run all tests (unit + snapshot)
