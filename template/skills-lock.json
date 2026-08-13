@@ -19,6 +19,12 @@
       "path": ".claude/skills/commenting/",
       "vendored": true,
       "note": "Ships with the one-shot-ios template."
+    },
+    "docc": {
+      "sourceType": "vendored",
+      "path": ".claude/skills/docc/",
+      "vendored": true,
+      "note": "Ships with the one-shot-ios template."
     }
   },
   "collections": {

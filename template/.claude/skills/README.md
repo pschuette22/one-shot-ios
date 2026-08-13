@@ -13,6 +13,7 @@ what your project actually needs.
 | ------------------- | ------------------------------------------------------------- |
 | `upgrade-deps`      | Loosen SPM pins, resolve, re-pin, repair build/test breakage. |
 | `commenting`        | Concise, minimal comments — only *why* / non-obvious things.  |
+| `docc`              | High-quality DocC (`///`) on every new or modified public symbol. |
 
 ## Recommended external skills
 
