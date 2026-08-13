@@ -46,7 +46,6 @@ Tuist/.build
 .build/
 
 ### Claude / local overrides ###
-.claude
 .mcp.json
 *.local
 *.local.*
