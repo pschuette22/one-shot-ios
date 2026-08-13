@@ -25,11 +25,11 @@ help: ## Show this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 .PHONY: new
-new: ## $(SPARK) Scaffold a new iOS project (interactive prompts)
+new: ## ✨ Scaffold a new iOS project (interactive prompts)
 	@$(SCAFFOLD)
 
 .PHONY: lint-template
-lint-template: ## $(WRENCH) Verify template tokens are only used in expected shapes
+lint-template: ## 🛠️  Verify template tokens are only used in expected shapes
 	@echo "$(BLUE)$(WRENCH) Linting template...$(RESET)"
 	@if grep -R --line-number --binary-files=without-match \
 		--exclude-dir='.build' --exclude-dir='.claude' --exclude-dir='__Snapshots__' \
@@ -41,7 +41,7 @@ lint-template: ## $(WRENCH) Verify template tokens are only used in expected sha
 	@echo "$(GREEN)$(CHECK) Template placeholders look sane$(RESET)"
 
 .PHONY: test-scaffold
-test-scaffold: lint-template ## $(TEST) Run the scaffolder into a temp dir and grep for leftover tokens
+test-scaffold: lint-template ## 🧪 Run the scaffolder into a temp dir and grep for leftover tokens
 	@echo "$(BLUE)$(TEST) Scaffolding into $(SCRATCH)...$(RESET)"
 	@rm -rf $(SCRATCH)
 	@$(SCAFFOLD) \

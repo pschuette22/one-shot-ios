@@ -12,6 +12,7 @@ what your project actually needs.
 | Skill               | Purpose                                                       |
 | ------------------- | ------------------------------------------------------------- |
 | `upgrade-deps`      | Loosen SPM pins, resolve, re-pin, repair build/test breakage. |
+| `commenting`        | Concise, minimal comments — only *why* / non-obvious things.  |
 
 ## Recommended external skills
 

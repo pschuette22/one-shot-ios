@@ -13,6 +13,12 @@
       "path": ".claude/skills/upgrade-deps/",
       "vendored": true,
       "note": "Ships with the one-shot-ios template."
+    },
+    "commenting": {
+      "sourceType": "vendored",
+      "path": ".claude/skills/commenting/",
+      "vendored": true,
+      "note": "Ships with the one-shot-ios template."
     }
   },
   "collections": {
