@@ -5,7 +5,129 @@
       "source": "twostraws/SwiftUI-Agent-Skill",
       "sourceType": "github",
       "skillPath": "swiftui-pro/SKILL.md",
-      "note": "Not vendored by default. Install with your skill manager, or copy the skill tree into .claude/skills/swiftui-pro/."
+      "vendored": false,
+      "note": "Install with your skill manager, or copy the skill tree into .claude/skills/swiftui-pro/."
+    },
+    "upgrade-deps": {
+      "sourceType": "vendored",
+      "path": ".claude/skills/upgrade-deps/",
+      "vendored": true,
+      "note": "Ships with the one-shot-ios template."
+    }
+  },
+  "collections": {
+    "swift-ios-skills": {
+      "source": "dpearson2699/swift-ios-skills",
+      "sourceType": "github",
+      "skillsRoot": "skills/",
+      "vendored": false,
+      "note": "86 iOS/Swift skills grouped by category. Install any subset by copying skills/<name>/ into .claude/skills/<name>/.",
+      "categories": {
+        "swiftui": [
+          "focus-engine",
+          "swiftui-animation",
+          "swiftui-gestures",
+          "swiftui-layout-components",
+          "swiftui-liquid-glass",
+          "swiftui-navigation",
+          "swiftui-patterns",
+          "swiftui-performance",
+          "swiftui-uikit-interop",
+          "swiftui-webkit"
+        ],
+        "core-swift": [
+          "swift-api-design-guidelines",
+          "swift-architecture",
+          "swift-codable",
+          "swift-charts",
+          "swift-concurrency",
+          "swift-formatstyle",
+          "swift-language",
+          "swift-testing",
+          "core-data",
+          "swiftdata"
+        ],
+        "app-experience": [
+          "activitykit",
+          "adattributionkit",
+          "alarmkit",
+          "app-clips",
+          "app-intents",
+          "avkit",
+          "carplay",
+          "mapkit",
+          "paperkit",
+          "pdfkit",
+          "photokit",
+          "push-notifications",
+          "storekit",
+          "tipkit",
+          "widgetkit"
+        ],
+        "data-services": [
+          "cloudkit",
+          "contacts-framework",
+          "eventkit",
+          "financekit",
+          "healthkit",
+          "musickit",
+          "passkit",
+          "weatherkit"
+        ],
+        "ai-ml": [
+          "apple-on-device-ai",
+          "coreml",
+          "natural-language",
+          "speech-recognition",
+          "vision-framework"
+        ],
+        "ios-engineering": [
+          "app-store-optimization",
+          "app-store-review",
+          "authentication",
+          "background-processing",
+          "cryptokit",
+          "debugging-instruments",
+          "device-integrity",
+          "ios-accessibility",
+          "ios-ettrace-performance",
+          "ios-localization",
+          "ios-memgraph-analysis",
+          "ios-networking",
+          "swift-security",
+          "ios-simulator",
+          "metrickit",
+          "swiftlint"
+        ],
+        "hardware": [
+          "accessorysetupkit",
+          "core-bluetooth",
+          "core-motion",
+          "core-nfc",
+          "dockkit",
+          "pencilkit",
+          "realitykit",
+          "sensorkit"
+        ],
+        "platform-integration": [
+          "appmigrationkit",
+          "audioaccessorykit",
+          "browserenginekit",
+          "callkit",
+          "cryptotokenkit",
+          "energykit",
+          "homekit",
+          "permissionkit",
+          "relevancekit",
+          "shareplay-activities"
+        ],
+        "gaming": [
+          "gamekit",
+          "scenekit",
+          "spritekit",
+          "tabletopkit"
+        ]
+      }
     }
   }
 }
