@@ -18,7 +18,6 @@ Temporary Items
 .apdisk
 
 ### Claude / local overrides ###
-.claude
 .mcp.json
 *.local
 *.local.*
