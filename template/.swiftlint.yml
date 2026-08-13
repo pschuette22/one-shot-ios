@@ -1,0 +1,8 @@
+excluded:
+  - Tuist
+  - Derived
+  - Modules/*/Derived
+  - Modules/*/Playground
+  - Packages/*/.build
+  - Packages/*/Derived
+  - .claude/

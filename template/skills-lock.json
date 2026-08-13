@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "swiftui-pro": {
+      "source": "twostraws/SwiftUI-Agent-Skill",
+      "sourceType": "github",
+      "skillPath": "swiftui-pro/SKILL.md",
+      "note": "Not vendored by default. Install with your skill manager, or copy the skill tree into .claude/skills/swiftui-pro/."
+    }
+  }
+}
