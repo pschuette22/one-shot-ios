@@ -36,6 +36,12 @@ project: ## $(PACKAGE) Generate Xcode project with Tuist
 	@tuist generate $(if $(NO_OPEN),--no-open) $(if $(filter 1,$(VERBOSE)),--verbose)
 	@echo "$(GREEN)$(CHECK) Project generated successfully!$(RESET)"
 
+.PHONY: install-deps
+install-deps: ## $(PACKAGE) Resolve Swift package dependencies (updates Tuist/Package.resolved)
+	@echo "$(BLUE)$(PACKAGE) Resolving Swift package dependencies...$(RESET)"
+	@tuist install $(if $(filter 1,$(VERBOSE)),--verbose)
+	@echo "$(GREEN)$(CHECK) Dependencies resolved!$(RESET)"
+
 .PHONY: build
 build: ## $(WRENCH) Build the project (TARGET=__APP_NAME__ by default)
 	@echo "$(BLUE)$(WRENCH) Building $(TARGET)...$(RESET)"
