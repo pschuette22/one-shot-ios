@@ -120,16 +120,59 @@ prompt_if_missing
 
 # Normalize platforms: trimmed, comma-joined
 PLATFORMS_NORMALIZED="$(echo "$PLATFORMS_INPUT" | tr -d '[:space:]')"
-# ProjectDescription enum-array form: ".iOS, .macOS, .watchOS"
+# ProjectDescription Destination cases. Tuist's Destination enum uses device-
+# level cases (.iPhone/.iPad/.mac/.appleWatch), not umbrella .iOS/.macOS names —
+# those exist only as static Destinations sets. Expand each user platform to
+# the concrete cases that go inside a `destinations: [...]` array literal.
+# In parallel, build a matching DeploymentTargets expression: Tuist rejects
+# deployment platforms that aren't represented in `destinations`, so both
+# substitutions must track the same set of selected platforms.
+IOS_DEPLOYMENT="18.0"
+MACOS_DEPLOYMENT="15.0"
+WATCHOS_DEPLOYMENT="11.0"
+
 PLATFORMS_PD=""
+dep_iOS=""; dep_macOS=""; dep_watchOS=""
+platform_count=0
 IFS=',' read -ra platform_arr <<< "$PLATFORMS_NORMALIZED"
 for p in "${platform_arr[@]}"; do
+    case "$p" in
+        iOS) expanded=".iPhone, .iPad"; dep_iOS=1 ;;
+        macOS) expanded=".mac"; dep_macOS=1 ;;
+        watchOS) expanded=".appleWatch"; dep_watchOS=1 ;;
+        *) die "Unsupported platform '$p' (allowed: iOS, macOS, watchOS)" ;;
+    esac
+    platform_count=$((platform_count + 1))
     if [ -z "$PLATFORMS_PD" ]; then
-        PLATFORMS_PD=".$p"
+        PLATFORMS_PD="$expanded"
     else
-        PLATFORMS_PD="$PLATFORMS_PD, .$p"
+        PLATFORMS_PD="$PLATFORMS_PD, $expanded"
     fi
 done
+
+# DeploymentTargets: single-platform gets the shorthand (.iOS("18.0")),
+# multi-platform gets .multiplatform(...) with only the selected keys.
+if [ "$platform_count" = 1 ]; then
+    if [ -n "$dep_iOS" ]; then
+        DEPLOYMENT_TARGETS_PD=".iOS(\"$IOS_DEPLOYMENT\")"
+    elif [ -n "$dep_macOS" ]; then
+        DEPLOYMENT_TARGETS_PD=".macOS(\"$MACOS_DEPLOYMENT\")"
+    else
+        DEPLOYMENT_TARGETS_PD=".watchOS(\"$WATCHOS_DEPLOYMENT\")"
+    fi
+else
+    parts=""
+    [ -n "$dep_iOS" ] && parts="iOS: \"$IOS_DEPLOYMENT\""
+    if [ -n "$dep_macOS" ]; then
+        [ -n "$parts" ] && parts="$parts, "
+        parts="${parts}macOS: \"$MACOS_DEPLOYMENT\""
+    fi
+    if [ -n "$dep_watchOS" ]; then
+        [ -n "$parts" ] && parts="$parts, "
+        parts="${parts}watchOS: \"$WATCHOS_DEPLOYMENT\""
+    fi
+    DEPLOYMENT_TARGETS_PD=".multiplatform($parts)"
+fi
 
 # Resolve target dir to absolute
 if [[ "$TARGET_DIR" = /* ]]; then
@@ -189,6 +232,7 @@ find "$ABS_TARGET" -type f \
         -e "s/__APP_NAME__/$APP_NAME/g" \
         -e "s|__BUNDLE_ID__|$BUNDLE_ID|g" \
         -e "s|__PLATFORMS__|$PLATFORMS_PD|g" \
+        -e "s|__DEPLOYMENT_TARGETS__|$DEPLOYMENT_TARGETS_PD|g" \
         "$file"
 done
 ok "Substituted tokens in file contents"

@@ -8,7 +8,7 @@ let project = Project(
             destinations: [__PLATFORMS__],
             product: .app,
             bundleId: "__BUNDLE_ID__",
-            deploymentTargets: .multiplatform(iOS: "18.0", macOS: "15.0", watchOS: "11.0"),
+            deploymentTargets: __DEPLOYMENT_TARGETS__,
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchScreen": [
@@ -31,7 +31,7 @@ let project = Project(
             destinations: [__PLATFORMS__],
             product: .unitTests,
             bundleId: "__BUNDLE_ID__.tests",
-            deploymentTargets: .multiplatform(iOS: "18.0", macOS: "15.0", watchOS: "11.0"),
+            deploymentTargets: __DEPLOYMENT_TARGETS__,
             infoPlist: .default,
             buildableFolders: [
                 "__APP_NAME__/Tests"
@@ -43,7 +43,7 @@ let project = Project(
             destinations: [__PLATFORMS__],
             product: .unitTests,
             bundleId: "__BUNDLE_ID__.snapshottests",
-            deploymentTargets: .multiplatform(iOS: "18.0", macOS: "15.0", watchOS: "11.0"),
+            deploymentTargets: __DEPLOYMENT_TARGETS__,
             infoPlist: .default,
             buildableFolders: [
                 "__APP_NAME__/SnapshotTests"

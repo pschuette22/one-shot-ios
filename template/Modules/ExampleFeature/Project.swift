@@ -8,7 +8,7 @@ let project = Project(
             destinations: [__PLATFORMS__],
             product: .framework,
             bundleId: "__BUNDLE_ID__.examplefeature",
-            deploymentTargets: .multiplatform(iOS: "18.0", macOS: "15.0", watchOS: "11.0"),
+            deploymentTargets: __DEPLOYMENT_TARGETS__,
             infoPlist: .default,
             buildableFolders: [
                 "Sources"
@@ -20,7 +20,7 @@ let project = Project(
             destinations: [__PLATFORMS__],
             product: .unitTests,
             bundleId: "__BUNDLE_ID__.examplefeature.tests",
-            deploymentTargets: .multiplatform(iOS: "18.0", macOS: "15.0", watchOS: "11.0"),
+            deploymentTargets: __DEPLOYMENT_TARGETS__,
             infoPlist: .default,
             buildableFolders: [
                 "Tests"
@@ -34,7 +34,7 @@ let project = Project(
             destinations: [__PLATFORMS__],
             product: .unitTests,
             bundleId: "__BUNDLE_ID__.examplefeature.snapshottests",
-            deploymentTargets: .multiplatform(iOS: "18.0", macOS: "15.0", watchOS: "11.0"),
+            deploymentTargets: __DEPLOYMENT_TARGETS__,
             infoPlist: .default,
             buildableFolders: [
                 "SnapshotTests"

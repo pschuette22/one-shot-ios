@@ -34,7 +34,7 @@ lint-template: ## 🛠️  Verify template tokens are only used in expected shap
 	@if grep -R --line-number --binary-files=without-match \
 		--exclude-dir='.build' --exclude-dir='.claude' --exclude-dir='__Snapshots__' \
 		-E '__[A-Z_]+__' $(TEMPLATE_DIR) \
-		| grep -v -E '__(APP_NAME|BUNDLE_ID|PLATFORMS)__' ; then \
+		| grep -v -E '__(APP_NAME|BUNDLE_ID|PLATFORMS|DEPLOYMENT_TARGETS)__' ; then \
 		echo "$(RED)✗ Unknown placeholder token found in template (see lines above)$(RESET)"; \
 		exit 1; \
 	fi
@@ -51,7 +51,7 @@ test-scaffold: lint-template ## 🧪 Run the scaffolder into a temp dir and grep
 		--target-dir $(SCRATCH) \
 		--no-git
 	@echo "$(BLUE)$(TEST) Checking for leftover placeholder tokens...$(RESET)"
-	@if grep -R --line-number --binary-files=without-match -E '__(APP_NAME|BUNDLE_ID|PLATFORMS)__' $(SCRATCH) ; then \
+	@if grep -R --line-number --binary-files=without-match -E '__(APP_NAME|BUNDLE_ID|PLATFORMS|DEPLOYMENT_TARGETS)__' $(SCRATCH) ; then \
 		echo "$(RED)✗ Leftover tokens in scaffold output$(RESET)"; \
 		exit 1; \
 	fi
