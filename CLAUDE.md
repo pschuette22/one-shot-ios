@@ -17,7 +17,7 @@ platform targets, it emits a working project with:
 ```
 one-shot-ios/
 ├── bin/scaffold.sh     # the scaffolder itself
-├── template/           # the project skeleton (with __APP_NAME__ / __BUNDLE_ID__ / __PLATFORMS__ tokens)
+├── template/           # the project skeleton (with __APP_NAME__ / __BUNDLE_ID__ / __PLATFORMS__ / __DEPLOYMENT_TARGETS__ tokens)
 ├── Makefile            # `make new`, `make lint-template`, `make test-scaffold`
 └── docs/               # design notes for the template
 ```
@@ -59,7 +59,8 @@ token slips through (or if a file references the app by its literal template nam
 | ----------------- | ---------------------------------------------------- |
 | `__APP_NAME__`    | App name, e.g. `DemoApp` (used in dir names too)     |
 | `__BUNDLE_ID__`   | Reverse-DNS bundle identifier                        |
-| `__PLATFORMS__`   | Comma-joined ProjectDescription `.iOS,.macOS` list   |
+| `__PLATFORMS__`   | Comma-joined `Destination` cases inside `[...]`, e.g. `.iPhone, .iPad, .mac` |
+| `__DEPLOYMENT_TARGETS__` | `DeploymentTargets` expression matching the selected platforms — `.iOS("18.0")` for a single platform, `.multiplatform(iOS: "18.0", macOS: "15.0")` for multi |
 
 Directory names that literally contain `__APP_NAME__` (e.g. `template/__APP_NAME__/`)
 are renamed after the copy step.
