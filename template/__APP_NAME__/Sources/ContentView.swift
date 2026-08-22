@@ -1,17 +1,21 @@
-import ExampleFeature
+import DesignSystem
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: DesignSystem.Spacing.lg) {
             Text("__APP_NAME__")
-                .font(.largeTitle)
-                .bold()
-            Text(ExampleFeature.greeting())
-                .font(.body)
-                .foregroundStyle(.secondary)
+                .textStyle(.titleLarge)
+            Card {
+                Text("Design system installed")
+                    .textStyle(.titleSmall)
+                Text("Browse tokens and components in the DesignSystemCatalog scheme.")
+                    .textStyle(.caption)
+            }
         }
-        .padding()
+        .padding(DesignSystem.Spacing.lg)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .background(Color.Surface.primary)
     }
 }
 
