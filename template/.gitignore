@@ -51,3 +51,6 @@ Tuist/.build
 .claude/*.local.*
 *.local
 *.local.*
+
+### Local environment ###
+.env.local

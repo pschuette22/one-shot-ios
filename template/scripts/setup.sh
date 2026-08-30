@@ -79,7 +79,54 @@ ensure_tuist() {
     fi
 }
 
+# Seeds .env.local from the tracked .env.template, then keeps it in sync as the
+# template gains keys. Existing values are never read or rewritten — only keys
+# absent from .env.local are appended, so a local secret survives every run.
+ensure_env_local() {
+    local template="$PROJECT_DIR/.env.template"
+    local env_local="$PROJECT_DIR/.env.local"
+
+    if [ ! -f "$template" ]; then
+        echo -e "${YELLOW}⚠ No .env.template found; skipping .env.local${RESET}"
+        return
+    fi
+
+    if [ ! -f "$env_local" ]; then
+        cp "$template" "$env_local"
+        echo -e "${GREEN}✓ Created .env.local from .env.template${RESET}"
+        echo -e "${YELLOW}  Edit .env.local to set your TUIST_DEV_TEAM_ID${RESET}"
+        return
+    fi
+
+    local added=0 line key
+    while IFS= read -r line || [ -n "$line" ]; do
+        key=$(printf '%s' "$line" | sed -nE 's/^[[:space:]]*(export[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*)=.*/\2/p')
+        if [ -z "$key" ]; then
+            continue
+        fi
+
+        if grep -qE "^[[:space:]]*(export[[:space:]]+)?$key=" "$env_local"; then
+            continue
+        fi
+
+        # Keep the file newline-terminated so the append cannot join two entries.
+        if [ -n "$(tail -c1 "$env_local")" ]; then
+            printf '\n' >> "$env_local"
+        fi
+        printf '%s\n' "$line" >> "$env_local"
+        echo -e "${YELLOW}  + $key${RESET}"
+        added=$((added + 1))
+    done < "$template"
+
+    if [ "$added" -gt 0 ]; then
+        echo -e "${GREEN}✓ .env.local gained $added key(s) from .env.template — fill them in${RESET}"
+    else
+        echo -e "${GREEN}✓ .env.local${RESET}"
+    fi
+}
+
 ensure_xcode
 ensure_tuist
+ensure_env_local
 
 echo -e "\n${GREEN}Setup complete!${RESET}"

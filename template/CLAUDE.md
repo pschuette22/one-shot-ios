@@ -13,15 +13,31 @@ actions and pins tool versions via `.tuist-version` / `.xcode-version`.
 
 | Command              | Purpose                                                       |
 | -------------------- | ------------------------------------------------------------- |
-| `make setup`         | Verify/install Xcode and Tuist at the pinned versions         |
+| `make setup`         | Verify/install Xcode and Tuist at the pinned versions; sync `.env.local` |
 | `make project`       | Run `tuist install` + `tuist generate` to produce the project |
 | `make build`         | Build the app target (override with `TARGET=...`)             |
 | `make unit-test`     | Run swift-testing unit suites                                 |
 | `make snapshot-test` | Run snapshot suites (`REPLACE=1` to re-record baselines)      |
 | `make test`          | Run all tests (unit + snapshot)                               |
 
-Run `make setup` once on a fresh checkout, then `make project` before opening
-the workspace.
+Run `make setup` on a fresh checkout, then `make project` before opening the
+workspace. Re-run `make setup` after a pull that adds an `.env.template` key.
+
+## Local environment
+
+`make setup` maintains `.env.local` (git-ignored) from the tracked
+`.env.template`: it creates the file when absent, and on later runs appends any
+template key the local file is missing, printing each as `+ KEY`. **Existing
+values are never read or rewritten**, so a filled-in secret survives every run
+— which makes `make setup` how you pick up a new key after a pull, not just a
+first-checkout step.
+
+The `Makefile` sources `.env.local` before every `tuist` invocation, so any
+variable prefixed `TUIST_` reaches the `Project.swift` manifest via
+`Environment.<camelCase>`. The starter file just declares `TUIST_DEV_TEAM_ID`,
+which flows into automatic code signing (see `Settings.appSettings`); add more
+`TUIST_*` variables as the project needs them — adding one to `.env.template`
+is enough for every developer's next `make setup` to pick it up.
 
 ## Snapshot tests
 
@@ -55,7 +71,15 @@ Each module in `Modules/<Name>/` follows this shape:
 └── SnapshotTests/         # UI regression + __Snapshots__/
 ```
 
-New modules should follow the same layout — copy `Modules/ExampleFeature/` as a starting point and update `Project.swift`, `Workspace.swift`, and this file's dependency graph.
+New modules should follow the same layout — copy `Modules/DesignSystem/` as a starting point (skipping its `Catalog/` app target unless the new module also warrants one) and update `Project.swift`, `Workspace.swift`, and this file's dependency graph.
+
+### DesignSystem
+
+`Modules/DesignSystem/` ships a seed design system: color, typography, spacing,
+and radius tokens plus a starter component. Its companion `DesignSystemCatalog`
+app target renders every token and component so the visual language stays
+runnable — and reviewable — on its own. Extend it as the product needs land;
+see `Modules/DesignSystem/CLAUDE.md` for the conventions.
 
 ## Testing framework
 

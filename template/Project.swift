@@ -1,7 +1,9 @@
 import ProjectDescription
+import ProjectDescriptionHelpers
 
 let project = Project(
     name: "__APP_NAME__",
+    settings: .appSettings,
     targets: [
         .target(
             name: "__APP_NAME__",
@@ -23,7 +25,7 @@ let project = Project(
             ],
             entitlements: "__APP_NAME__/Config/__APP_NAME__.entitlements",
             dependencies: [
-                .project(target: "ExampleFeature", path: "./Modules/ExampleFeature")
+                .project(target: "DesignSystem", path: "./Modules/DesignSystem")
             ]
         ),
         .target(
