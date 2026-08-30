@@ -1,8 +1,5 @@
 import ProjectDescription
 
-// Shared build settings applied across the workspace. Keeping deployment
-// targets, Swift version, and debug-info format in one place avoids drift
-// across per-project `Project.swift` files.
 extension Settings {
     private static var baseSettings: SettingsDictionary {
         [

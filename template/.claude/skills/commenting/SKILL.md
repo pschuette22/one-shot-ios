@@ -15,11 +15,18 @@ A comment earns its place only if it captures one of:
 - A **non-obvious invariant** the code relies on (e.g. "callers hold the queue
   lock", "input is guaranteed non-empty by the caller").
 - A **hidden constraint** imposed from outside the file (e.g. "kernel returns
-  EAGAIN here on macOS < 14", "this ordering matches the on-disk format").
+  EAGAIN here on macOS < 14", "this ordering matches the on-disk format",
+  "Tuist's default hardcodes 1.0/1, shadowing the settings").
 - A **workaround** for a specific bug in an external system, ideally with a
   link or issue number.
 - Behavior that would **surprise a careful reader** — an intentional swap, a
   deliberately non-idiomatic construct, a subtle ordering.
+- The **semantic intent** behind a magic number or opaque literal, when the
+  name alone can't carry it (e.g. `/// 8 points — spacing within a component`,
+  `/// 20 points — spacing between related components`). This is what makes a
+  scale readable without opening the values.
+- For a test, **why the test exists** — the bug it pins, the invariant it
+  guards, or the strategy it embodies. Not what the assertions do.
 
 If deleting the comment wouldn't confuse someone reading the code fresh, delete
 it.
@@ -37,10 +44,15 @@ it.
 - **A pointer to other files or callers.** ("Called from LoginView",
   "matches the shape in UserRepo".) Grep is authoritative; the reference goes
   stale on the next rename.
-- **A section header or decorative divider.** (`// MARK: - helpers`,
-  `// ============`.) Structure the file so the shape is obvious from the code.
-- **A `TODO` or `FIXME` without a name and issue link.** Untracked TODOs
-  accumulate forever. Prefer filing an issue.
+- **A decorative divider** (`// ============`, banner ASCII art). Never earns
+  its place. Also skip `// MARK:` in short files — if the shape is already
+  obvious from the code, the divider is noise. `// MARK: - <Name>` is fine
+  in files long enough that visual navigation matters (multi-hundred-line
+  types, test files with many suites), but it is not license to keep a file
+  long: prefer splitting when the sections are actually independent.
+- **A `TODO`, `FIXME`, or `HACK`.** Untracked markers accumulate forever, and
+  even the tracked ones rot. File an issue and let git blame carry the pointer;
+  don't leave the marker behind.
 
 ## Format
 
@@ -58,7 +70,16 @@ when they add value beyond the signature:
 
 - Document **contracts** the type name doesn't already convey: preconditions,
   postconditions, side effects, thread-safety, error conditions.
-- Keep them terse. A single-sentence summary is usually enough.
+- On a token or scale, name the **intent** each value carries so a reader can
+  choose without opening the numbers (`/// 12 points — spacing between related
+  components`, `/// The window background.`, `/// Supporting copy, captions,
+  and disabled controls.`).
+- On a type that models a domain concept, a two-to-three-sentence lead can
+  earn its keep by naming the **role and non-obvious rules**: what the type is
+  *for*, what invariants it guards, what it is deliberately *not*. Skip this
+  when the name already carries the whole story.
+- Keep the summary line terse. A single sentence is usually enough; expand only
+  when the type's role or contract genuinely needs more.
 - Skip them entirely when the name and parameter labels already say
   everything (`func title() -> String`).
 
@@ -113,4 +134,32 @@ func parseToken(_ raw: String) -> Token? { ... }
 ```swift
 // Previously used a synchronous call here; switched to async.
 let user = try await repo.load(id)
+```
+
+**Keep** — names the intent behind a magic number so the scale reads without
+opening the values:
+
+```swift
+/// 16 points — the default screen margin.
+public static let lg: CGFloat = 16
+```
+
+**Keep** — a test-strategy comment that pins *why* the assertion matters:
+
+```swift
+/// SwiftUI resolves a missing colorset silently, so a renamed or deleted
+/// entry would only show up as a wrong color at runtime. Every token declares
+/// distinct light and dark values, so a color that resolves identically in
+/// both appearances did not come from the catalog.
+@Test("every color token resolves from the asset catalog")
+func colorsResolve() { ... }
+```
+
+**Delete** — restates that a group of things is grouped:
+
+```swift
+// Shared build settings applied across the workspace. Keeping deployment
+// targets and Swift version in one place avoids drift across per-project
+// `Project.swift` files.
+extension Settings { ... }
 ```
